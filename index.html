@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARCADE HUB — Mini Game Collection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-bracket">[</span>ARCADE HUB<span class="logo-bracket">]</span>
+      </div>
+      <div class="header-right">
+        <div class="score-display" id="globalScore">
+          <span class="score-label">SCORE</span>
+          <span class="score-value" id="scoreValue">0</span>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span class="theme-icon" id="themeIcon">☀</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HOME SCREEN -->
+  <main id="homeScreen" class="screen active">
+    <div class="home-hero">
+      <h1 class="home-title">PLAY.<br>WIN.<br>REPEAT.</h1>
+    </div>
+    <div class="game-grid">
+
+      <button class="game-card" data-game="tictactoe">
+        <div class="card-number">01</div>
+        <div class="card-icon">✕ ○</div>
+        <div class="card-body">
+          <h2 class="card-title">TIC TAC TOE</h2>
+          <p class="card-desc">Solo vs AI or 2-player battle on a 3×3 grid</p>
+        </div>
+        <div class="card-tag">1-2 PLAYERS</div>
+        <div class="card-glow"></div>
+      </button>
+
+      <button class="game-card" data-game="sudoku">
+        <div class="card-number">02</div>
+        <div class="card-icon">9 □</div>
+        <div class="card-body">
+          <h2 class="card-title">SUDOKU</h2>
+          <p class="card-desc">Fill the grid — numbers 1–9, no repeats</p>
+        </div>
+        <div class="card-tag">SOLO</div>
+        <div class="card-glow"></div>
+      </button>
+
+      <button class="game-card" data-game="memory">
+        <div class="card-number">03</div>
+        <div class="card-icon">⬛ ⬛</div>
+        <div class="card-body">
+          <h2 class="card-title">MEMORY MATCH</h2>
+          <p class="card-desc">Flip cards and find matching pairs</p>
+        </div>
+        <div class="card-tag">SOLO</div>
+        <div class="card-glow"></div>
+      </button>
+
+      <button class="game-card" data-game="rps">
+        <div class="card-number">04</div>
+        <div class="card-icon">✊ ✋</div>
+        <div class="card-body">
+          <h2 class="card-title">ROCK PAPER SCISSORS</h2>
+          <p class="card-desc">vs Computer or challenge a friend</p>
+        </div>
+        <div class="card-tag">1-2 PLAYERS</div>
+        <div class="card-glow"></div>
+      </button>
+
+      <button class="game-card" data-game="numguess">
+        <div class="card-number">05</div>
+        <div class="card-icon">? #</div>
+        <div class="card-body">
+          <h2 class="card-title">NUMBER QUEST</h2>
+          <p class="card-desc">Guess the secret number in fewest tries</p>
+        </div>
+        <div class="card-tag">SOLO</div>
+        <div class="card-glow"></div>
+      </button>
+
+    </div>
+  </main>
+
+  <!-- ===== GAME SCREENS ===== -->
+
+  <!-- TIC TAC TOE -->
+  <section id="tictactoeScreen" class="screen game-screen">
+    <div class="game-header">
+      <button class="back-btn" data-back>← BACK</button>
+      <h2 class="game-title">TIC TAC TOE</h2>
+      <button class="restart-btn" id="tttRestart">↺ RESTART</button>
+    </div>
+    <div class="game-content">
+      <!-- Mode toggle -->
+      <div class="rps-mode-toggle">
+        <button class="mode-btn active" id="tttVsCPU">VS COMPUTER</button>
+        <button class="mode-btn" id="tttVsPlayer">VS PLAYER</button>
+      </div>
+      <!-- AI difficulty (shown in VS CPU mode) -->
+      <div class="ttt-difficulty" id="tttDifficulty">
+        <button class="diff-btn active" data-diff="easy">EASY</button>
+        <button class="diff-btn" data-diff="moderate">MODERATE</button>
+        <button class="diff-btn" data-diff="hard">HARD</button>
+      </div>
+      <div class="ttt-status" id="tttStatus">Player X's Turn</div>
+      <div class="ttt-scoreboard">
+        <div class="ttt-score-item">
+          <span class="ttt-score-label">X WINS</span>
+          <span class="ttt-score-val" id="tttScoreX">0</span>
+        </div>
+        <div class="ttt-score-item draws">
+          <span class="ttt-score-label">DRAWS</span>
+          <span class="ttt-score-val" id="tttScoreDraw">0</span>
+        </div>
+        <div class="ttt-score-item">
+          <span class="ttt-score-label">O WINS</span>
+          <span class="ttt-score-val" id="tttScoreO">0</span>
+        </div>
+      </div>
+      <div class="ttt-board" id="tttBoard">
+        <button class="ttt-cell" data-cell="0"></button>
+        <button class="ttt-cell" data-cell="1"></button>
+        <button class="ttt-cell" data-cell="2"></button>
+        <button class="ttt-cell" data-cell="3"></button>
+        <button class="ttt-cell" data-cell="4"></button>
+        <button class="ttt-cell" data-cell="5"></button>
+        <button class="ttt-cell" data-cell="6"></button>
+        <button class="ttt-cell" data-cell="7"></button>
+        <button class="ttt-cell" data-cell="8"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUDOKU -->
+  <section id="sudokuScreen" class="screen game-screen">
+    <div class="game-header">
+      <button class="back-btn" data-back>← BACK</button>
+      <h2 class="game-title">SUDOKU</h2>
+      <div class="sudoku-controls">
+        <button class="restart-btn" id="sudokuNew">NEW GAME</button>
+        <button class="restart-btn" id="sudokuSolve">SOLVE</button>
+      </div>
+    </div>
+    <div class="game-content">
+      <div class="sudoku-timer" id="sudokuTimer">00:00</div>
+      <div class="sudoku-wrap">
+        <div class="sudoku-grid" id="sudokuGrid"></div>
+        <div class="sudoku-numpad" id="sudokuNumpad">
+          <button class="numpad-btn" data-num="1">1</button>
+          <button class="numpad-btn" data-num="2">2</button>
+          <button class="numpad-btn" data-num="3">3</button>
+          <button class="numpad-btn" data-num="4">4</button>
+          <button class="numpad-btn" data-num="5">5</button>
+          <button class="numpad-btn" data-num="6">6</button>
+          <button class="numpad-btn" data-num="7">7</button>
+          <button class="numpad-btn" data-num="8">8</button>
+          <button class="numpad-btn" data-num="9">9</button>
+          <button class="numpad-btn erase-btn" data-num="0">⌫</button>
+        </div>
+      </div>
+      <p class="sudoku-hint">Select a cell, then tap a number</p>
+    </div>
+  </section>
+
+  <!-- MEMORY MATCH -->
+  <section id="memoryScreen" class="screen game-screen">
+    <div class="game-header">
+      <button class="back-btn" data-back>← BACK</button>
+      <h2 class="game-title">MEMORY MATCH</h2>
+      <button class="restart-btn" id="memoryRestart">↺ RESTART</button>
+    </div>
+    <div class="game-content">
+      <div class="memory-stats">
+        <div class="mem-stat">
+          <span class="mem-stat-label">MOVES</span>
+          <span class="mem-stat-val" id="memMoves">0</span>
+        </div>
+        <div class="mem-stat">
+          <span class="mem-stat-label">PAIRS</span>
+          <span class="mem-stat-val" id="memPairs">0/8</span>
+        </div>
+        <div class="mem-stat">
+          <span class="mem-stat-label">TIME</span>
+          <span class="mem-stat-val" id="memTimer">00:00</span>
+        </div>
+      </div>
+      <div class="memory-grid" id="memoryGrid"></div>
+    </div>
+  </section>
+
+  <!-- ROCK PAPER SCISSORS -->
+  <section id="rpsScreen" class="screen game-screen">
+    <div class="game-header">
+      <button class="back-btn" data-back>← BACK</button>
+      <h2 class="game-title">ROCK PAPER SCISSORS</h2>
+      <button class="restart-btn" id="rpsRestart">↺ RESET</button>
+    </div>
+    <div class="game-content">
+      <div class="rps-mode-toggle">
+        <button class="mode-btn active" id="rpsVsCPU">VS COMPUTER</button>
+        <button class="mode-btn" id="rpsVsPlayer">VS PLAYER</button>
+      </div>
+      <!-- RPS AI difficulty -->
+      <div class="ttt-difficulty" id="rpsDifficulty">
+        <button class="diff-btn active" data-rps-diff="easy">EASY</button>
+        <button class="diff-btn" data-rps-diff="moderate">MODERATE</button>
+        <button class="diff-btn" data-rps-diff="hard">HARD</button>
+      </div>
+      <div class="rps-scoreboard">
+        <div class="rps-score-item">
+          <span class="rps-player-name" id="rpsP1Name">PLAYER 1</span>
+          <span class="rps-score-val" id="rpsScore1">0</span>
+        </div>
+        <div class="rps-vs">VS</div>
+        <div class="rps-score-item">
+          <span class="rps-player-name" id="rpsP2Name">COMPUTER</span>
+          <span class="rps-score-val" id="rpsScore2">0</span>
+        </div>
+      </div>
+      <div class="rps-arena">
+        <div class="rps-choice-display" id="rpsChoice1">?</div>
+        <div class="rps-result" id="rpsResult">CHOOSE YOUR WEAPON</div>
+        <div class="rps-choice-display" id="rpsChoice2">?</div>
+      </div>
+
+      <!-- P1 always visible -->
+      <div class="rps-buttons" id="rpsButtons1">
+        <p class="rps-turn-label" id="rpsTurnLabel">PLAYER 1</p>
+        <button class="rps-btn" data-choice="rock" data-player="1">✊ ROCK</button>
+        <button class="rps-btn" data-choice="paper" data-player="1">✋ PAPER</button>
+        <button class="rps-btn" data-choice="scissors" data-player="1">✌ SCISSORS</button>
+      </div>
+
+      <!-- P2 panel (2-player mode only) -->
+      <div class="rps-buttons hidden" id="rpsButtons2">
+        <p class="rps-turn-label">PLAYER 2</p>
+        <button class="rps-btn" data-choice="rock" data-player="2">✊ ROCK</button>
+        <button class="rps-btn" data-choice="paper" data-player="2">✋ PAPER</button>
+        <button class="rps-btn" data-choice="scissors" data-player="2">✌ SCISSORS</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUMBER QUEST -->
+  <section id="numguessScreen" class="screen game-screen">
+    <div class="game-header">
+      <button class="back-btn" data-back>← BACK</button>
+      <h2 class="game-title">NUMBER QUEST</h2>
+      <button class="restart-btn" id="numRestart">↺ NEW GAME</button>
+    </div>
+    <div class="game-content">
+      <div class="num-difficulty">
+        <button class="diff-btn active" data-range="100">EASY (1–100)</button>
+        <button class="diff-btn" data-range="500">MEDIUM (1–500)</button>
+        <button class="diff-btn" data-range="1000">HARD (1–1000)</button>
+      </div>
+      <div class="num-display">
+        <div class="num-attempts-label">ATTEMPTS</div>
+        <div class="num-attempts" id="numAttempts">0</div>
+        <div class="num-feedback" id="numFeedback">I'm thinking of a number…</div>
+        <div class="num-range-bar">
+          <span id="numRangeLow">1</span>
+          <div class="num-bar-track">
+            <div class="num-bar-fill" id="numBarFill"></div>
+          </div>
+          <span id="numRangeHigh">100</span>
+        </div>
+      </div>
+      <div class="num-input-row">
+        <input type="number" id="numInput" class="num-input" placeholder="Enter guess…" min="1" max="100" />
+        <button class="guess-btn" id="numGuessBtn">GUESS</button>
+      </div>
+      <ul class="num-history" id="numHistory"></ul>
+    </div>
+  </section>
+
+  <!-- WIN OVERLAY -->
+  <div class="win-overlay hidden" id="winOverlay">
+    <div class="win-box">
+      <div class="win-emoji" id="winEmoji">🏆</div>
+      <h2 class="win-title" id="winTitle">YOU WIN!</h2>
+      <p class="win-sub" id="winSub"></p>
+      <button class="win-btn" id="winPlay">PLAY AGAIN</button>
+      <button class="win-btn secondary" id="winHome">BACK TO HUB</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
